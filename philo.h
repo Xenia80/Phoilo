@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: pnona <pnona@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/04 15:03:12 by lloko             #+#    #+#             */
-/*   Updated: 2022/06/25 00:34:51 by user             ###   ########.fr       */
+/*   Created: 2022/06/26 20:31:15 by pnona             #+#    #+#             */
+/*   Updated: 2022/06/26 20:33:53 by pnona            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,9 @@ typedef struct s_data
 	int				num_philo;
 	int				eat_raz;
 	t_philo			**philo;
+	pthread_mutex_t	print;
+	pthread_mutex_t	*forks;
 }				t_data;
-
-typedef struct timeval
-{
-	long	tv_sec;
-	long	tv_usec;
-}				t_time;
 
 typedef struct s_philo
 {
@@ -48,17 +44,23 @@ typedef struct s_philo
 	unsigned long	lasteat;
 	pthread_t		phi;
 	pthread_mutex_t	mute;
-	pthread_mutex_t	print;
-	pthread_mutex_t	*forks;
 	t_data			*data;
-	t_time			check_time;
-}				t_philo
+}				t_philo;
 
-int		ft_error(int i);
-long	get_time(void);
-void	my_usleep(long long ms);
-int		check_arg(int argc, char **argv, t_data *data);
-t_data	*init_data(char **argv);
-t_philo	*init_philo(int i, t_data *data);
+int				ft_error(int i);
+long			get_time(void);
+void			my_usleep(long long ms);
+int				ft_atoi(const char *str);
+int				check_arg(char **argv);
+t_data			*init_data(char **argv);
+t_philo			*init_philo(int i, t_data *data);
+pthread_mutex_t	*forks_init(int num);
+t_philo			*init_philo(int i, t_data *data);
+void			init_threads(t_data *data);
+void			grab_forks(t_philo *philo);
+void			put_forks(t_philo *philo);
+int				check_numeat(t_data *data);
+void			if_death(t_data *data);
+void			*philosopher(void *philos);
 
 #endif
